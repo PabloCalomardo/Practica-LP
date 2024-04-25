@@ -6,35 +6,12 @@ from exprsLexer import exprsLexer
 from exprsParser import exprsParser
 from exprsVisitor import exprsVisitor
 
+#dependencies de fitxers meus
+import dependencies as dp
+
 st.title('HinNer by Pablo')
 variable = st.text_input('Escriu la teva expressió', '3 + 4')
 print(variable)
-
-class TreeVisitor(exprsVisitor):
-    def __init__(self):
-        self.nivell = 0
-    def visitSuma(self, ctx):
-        [expressio1, operador, expressio2] = list(ctx.getChildren())
-        print('  ' *  self.nivell + '+')
-        self.nivell += 1
-        self.visit(expressio1)
-        self.visit(expressio2)
-        self.nivell -= 1
-    def visitNumero(self, ctx):
-        [numero] = list(ctx.getChildren())
-        print("  " * self.nivell + numero.getText())
-
-class EvalVisitor(exprsVisitor):
-    def visitRoot(self, ctx):
-        [expressio] = list(ctx.getChildren())
-        print(self.visit(expressio))
-    def visitSuma(self, ctx):
-        [expressio1, operador, expressio2] = list(ctx.getChildren())
-        return self.visit(expressio1) + self.visit(expressio2)
-    def visitNumero(self, ctx):
-        [numero] = list(ctx.getChildren())
-        return int(numero.getText())
-
 
 
 input_stream  = InputStream(variable)
@@ -44,8 +21,13 @@ parser = exprsParser(token_stream)
 tree = parser.root()
 
 if parser.getNumberOfSyntaxErrors() == 0:
-  visitor = TreeVisitor()
+  #arbre de nodes
+  visitor = dp.TreeVisitor()
   visitor.visit(tree)
+
+  #evaluador de l'arbre
+  visitor2 = dp.EvalVisitor()
+  visitor2.visit(tree)
 else:
   print(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
   print(tree.toStringTree(recog=parser))
