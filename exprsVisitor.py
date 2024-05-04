@@ -14,11 +14,6 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#suma.
-    def visitSuma(self, ctx:exprsParser.SumaContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by exprsParser#potencia.
     def visitPotencia(self, ctx:exprsParser.PotenciaContext):
         return self.visitChildren(ctx)
@@ -29,18 +24,28 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#multiplicacio.
-    def visitMultiplicacio(self, ctx:exprsParser.MultiplicacioContext):
+    # Visit a parse tree produced by exprsParser#variable.
+    def visitVariable(self, ctx:exprsParser.VariableContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#resta.
-    def visitResta(self, ctx:exprsParser.RestaContext):
+    # Visit a parse tree produced by exprsParser#sumaresta.
+    def visitSumaresta(self, ctx:exprsParser.SumarestaContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#divisio.
-    def visitDivisio(self, ctx:exprsParser.DivisioContext):
+    # Visit a parse tree produced by exprsParser#muldiv.
+    def visitMuldiv(self, ctx:exprsParser.MuldivContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#assignacio.
+    def visitAssignacio(self, ctx:exprsParser.AssignacioContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#escriu.
+    def visitEscriu(self, ctx:exprsParser.EscriuContext):
         return self.visitChildren(ctx)
 
 

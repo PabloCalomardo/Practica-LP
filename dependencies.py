@@ -94,12 +94,12 @@ class EvalVisitor(exprsVisitor):
     def visitAssignacio(self, ctx:exprsParser.AssignacioContext):
         llista = list(ctx.getChildren())
         self.taulaSimbols[llista[0].getText()] = self.visit(llista[2])
+        print(dict (self.taulaSimbols))
         return self.visit(llista[2])
 
     # Visit a parse tree produced by exprsParser#escriu.
     def visitEscriu(self, ctx:exprsParser.EscriuContext):
         print(dict (self.taulaSimbols))
-        self.taulaSimbols['x'] = 2
         llista = list(ctx.getChildren())
         print (self.taulaSimbols[llista[1].getText()])
         return (self.taulaSimbols[llista[1].getText()])
