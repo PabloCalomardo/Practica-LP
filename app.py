@@ -15,30 +15,23 @@ st.title('HinNer by Pablo')
 variable = st.text_input('Escriu la teva expressió', '3 + 4')
 print(variable)
 
-evaluador = dp.EvalVisitor()
+if 'evaluador' not in st.session_state:
+    st.session_state.evaluador = dp.EvalVisitor()
 
-if 'clicked' not in st.session_state:
-    st.session_state.clicked = False
 
-def click_button():
-    st.session_state.clicked = True
+if st.button('Entra el text'):
+  input_stream  = InputStream(variable)
+  lexer = exprsLexer(input_stream)
+  token_stream = CommonTokenStream(lexer)
+  parser = exprsParser(token_stream)
+  tree = parser.root()
 
-st.button('Entra el text', on_click=click_button)
-
-while(True):
-  if st.session_state.clicked:
-    input_stream  = InputStream(variable)
-    lexer = exprsLexer(input_stream)
-    token_stream = CommonTokenStream(lexer)
-    parser = exprsParser(token_stream)
-    tree = parser.root()
-
-    if parser.getNumberOfSyntaxErrors() == 0:
-      #evaluador de l'arbre
-      evaluador.visit(tree)
-    else:
-      print(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
-      print(tree.toStringTree(recog=parser))
-    novaentrada = False
-    st.session_state.clicked = False
+  if parser.getNumberOfSyntaxErrors() == 0:
+    #evaluador de l'arbre
+    st.session_state.evaluador.visit(tree)
+  else:
+    print(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
+    print(tree.toStringTree(recog=parser))
+  novaentrada = False
+  st.session_state.clicked = False
 
