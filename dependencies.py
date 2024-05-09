@@ -47,17 +47,6 @@ class TreeVisitor(exprsVisitor):
         print("  " * self.nivell + numero.getText())
 
 
-
-
-
-
-
-
-
-
-
-
-
 class EvalVisitor(exprsVisitor):
 
     def __init__(self):
@@ -84,7 +73,56 @@ class EvalVisitor(exprsVisitor):
         [expressio1, operador, expressio2] = list(ctx.getChildren())
         if(operador.getText() == '*'):
             return self.visit(expressio1) * self.visit(expressio2)
-        return self.visit(expressio1) / self.visit(expressio2)
+        return self.visit(expressio1) // self.visit(expressio2)
+    
+    def visitIgual(self, ctx):
+        [var,igual,numero] = list(ctx.getChildren())
+        if self.taulaSimbols[var.getText()] == self.visit(numero):
+            return True
+        return False
+    
+    def visitDiferent(self, ctx):
+        [var,igual,numero] = list(ctx.getChildren())
+        if self.taulaSimbols[var.getText()] != self.visit(numero):
+            return True
+        return False
+    
+    def visitMenorigual(self, ctx):
+        [var,igual,numero] = list(ctx.getChildren())
+        if self.taulaSimbols[var.getText()] <= self.visit(numero):
+            return True
+        return False
+    
+    def visitMesgranigual(self, ctx):
+        [var,igual,numero] = list(ctx.getChildren())
+        if self.taulaSimbols[var.getText()] >= self.visit(numero):
+            return True
+        return False
+
+    def visitMenor(self, ctx):
+        [var,igual,numero] = list(ctx.getChildren())
+        if self.taulaSimbols[var.getText()] < self.visit(numero):
+            return True
+        return False
+    
+    def visitMajor(self, ctx):
+        [var,igual,numero] = list(ctx.getChildren())
+        if self.taulaSimbols[var.getText()] > self.visit(numero):
+            return True
+        return False
+
+    def visitInstr2(self, ctx:exprsParser.Instr2Context):
+        llista = list(ctx.getChildren())
+        if(len(llista) > 1):
+            return self.visit(llista[0]) and self.visit(llista[1])
+        return self.visit(llista[0])
+    
+    def visitCond2(self,ctx):
+        llista = list(ctx.getChildren())
+        if(len(llista) > 1):
+            return self.visit(llista[0]) and self.visit(llista[1])
+        return self.visit(llista[0])
+            
 
     def visitVariable(self, ctx:exprsParser.VariableContext):
         [numero] = list(ctx.getChildren())
@@ -94,16 +132,21 @@ class EvalVisitor(exprsVisitor):
     def visitAssignacio(self, ctx:exprsParser.AssignacioContext):
         llista = list(ctx.getChildren())
         self.taulaSimbols[llista[0].getText()] = self.visit(llista[2])
-        print(dict (self.taulaSimbols))
         return self.visit(llista[2])
 
     # Visit a parse tree produced by exprsParser#escriu.
     def visitEscriu(self, ctx:exprsParser.EscriuContext):
         print(dict (self.taulaSimbols))
         llista = list(ctx.getChildren())
-        print (self.taulaSimbols[llista[1].getText()])
-        return (self.taulaSimbols[llista[1].getText()])
+        return self.taulaSimbols[llista[1].getText()]
+    
+    def visitIf(self,ctx:exprsParser.IfContext):
+        llista = list(ctx.getChildren())
+        if self.visit(llista[1]):
+            return self.visit(llista[3])
+        return None
 
     def visitNumero(self, ctx):
         [numero] = list(ctx.getChildren())
         return int(numero.getText())
+

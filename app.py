@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import keyboard
 from antlr4 import *
 from exprsLexer import exprsLexer
 from exprsParser import exprsParser
@@ -16,8 +17,7 @@ variable = st.text_input('Escriu la teva expressió', '3 + 4')
 print(variable)
 
 if 'evaluador' not in st.session_state:
-    st.session_state.evaluador = dp.EvalVisitor()
-
+  st.session_state.evaluador = dp.EvalVisitor()
 
 if st.button('Entra el text'):
   input_stream  = InputStream(variable)
