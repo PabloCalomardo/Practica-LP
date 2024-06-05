@@ -14,8 +14,13 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#potencia.
-    def visitPotencia(self, ctx:exprsParser.PotenciaContext):
+    # Visit a parse tree produced by exprsParser#ExpresioLambda.
+    def visitExpresioLambda(self, ctx:exprsParser.ExpresioLambdaContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#Operacio.
+    def visitOperacio(self, ctx:exprsParser.OperacioContext):
         return self.visitChildren(ctx)
 
 
@@ -29,68 +34,18 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by exprsParser#lambdaExpr.
+    def visitLambdaExpr(self, ctx:exprsParser.LambdaExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#multiplicaciodivisio.
+    def visitMultiplicaciodivisio(self, ctx:exprsParser.MultiplicaciodivisioContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by exprsParser#sumaresta.
     def visitSumaresta(self, ctx:exprsParser.SumarestaContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#muldiv.
-    def visitMuldiv(self, ctx:exprsParser.MuldivContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#igual.
-    def visitIgual(self, ctx:exprsParser.IgualContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#diferent.
-    def visitDiferent(self, ctx:exprsParser.DiferentContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#menorigual.
-    def visitMenorigual(self, ctx:exprsParser.MenorigualContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#mesgranigual.
-    def visitMesgranigual(self, ctx:exprsParser.MesgranigualContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#menor.
-    def visitMenor(self, ctx:exprsParser.MenorContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#major.
-    def visitMajor(self, ctx:exprsParser.MajorContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#instr2.
-    def visitInstr2(self, ctx:exprsParser.Instr2Context):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#assignacio.
-    def visitAssignacio(self, ctx:exprsParser.AssignacioContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#escriu.
-    def visitEscriu(self, ctx:exprsParser.EscriuContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#if.
-    def visitIf(self, ctx:exprsParser.IfContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by exprsParser#while.
-    def visitWhile(self, ctx:exprsParser.WhileContext):
         return self.visitChildren(ctx)
 
 

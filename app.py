@@ -8,7 +8,7 @@ from exprsParser import exprsParser
 from exprsVisitor import exprsVisitor
 
 #dependencies de fitxers meus
-import dependencies as dp
+import haskell as hk
 
 
 
@@ -16,8 +16,8 @@ st.title('HinNer by Pablo')
 variable = st.text_input('Escriu la teva expressió', '3 + 4')
 print(variable)
 
-if 'evaluador' not in st.session_state:
-  st.session_state.evaluador = dp.EvalVisitor()
+if 'visitador' not in st.session_state:
+  st.session_state.visitador = hk.TreeVisitor()
 
 if st.button('Entra el text'):
   input_stream  = InputStream(variable)
@@ -28,10 +28,11 @@ if st.button('Entra el text'):
 
   if parser.getNumberOfSyntaxErrors() == 0:
     #evaluador de l'arbre
-    st.session_state.evaluador.visit(tree)
+    st.session_state.visitador.visit(tree)
   else:
     print(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
     print(tree.toStringTree(recog=parser))
+    
   novaentrada = False
   st.session_state.clicked = False
 
