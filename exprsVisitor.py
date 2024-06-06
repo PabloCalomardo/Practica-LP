@@ -19,8 +19,23 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by exprsParser#Operacioincompleta.
+    def visitOperacioincompleta(self, ctx:exprsParser.OperacioincompletaContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by exprsParser#Operacio.
     def visitOperacio(self, ctx:exprsParser.OperacioContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#funcion.
+    def visitFuncion(self, ctx:exprsParser.FuncionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#numovar.
+    def visitNumovar(self, ctx:exprsParser.NumovarContext):
         return self.visitChildren(ctx)
 
 
@@ -34,18 +49,23 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#lambdaExpr.
-    def visitLambdaExpr(self, ctx:exprsParser.LambdaExprContext):
+    # Visit a parse tree produced by exprsParser#lambdafunc.
+    def visitLambdafunc(self, ctx:exprsParser.LambdafuncContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#multiplicaciodivisio.
-    def visitMultiplicaciodivisio(self, ctx:exprsParser.MultiplicaciodivisioContext):
+    # Visit a parse tree produced by exprsParser#operaciobinaria.
+    def visitOperaciobinaria(self, ctx:exprsParser.OperaciobinariaContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#sumaresta.
-    def visitSumaresta(self, ctx:exprsParser.SumarestaContext):
+    # Visit a parse tree produced by exprsParser#operaciounaria.
+    def visitOperaciounaria(self, ctx:exprsParser.OperaciounariaContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#operador.
+    def visitOperador(self, ctx:exprsParser.OperadorContext):
         return self.visitChildren(ctx)
 
 

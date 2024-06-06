@@ -1,24 +1,34 @@
 grammar exprs;
 
-root : expr             // l'etiqueta ja és root
+root : expr EOF            // l'etiqueta ja és root
      ;
 
 expr: lambdaExpr    #ExpresioLambda
-    | infixExpr     #Operacio
-    | NUMBER        #numero
+    | infixExpr     #Operacioincompleta
+    | infixExprComp     #Operacio
+    | '(' lambdaExpr ')' NUMBER     #funcion
+    | expr2         #numovar
+    ;
+
+expr2: NUMBER       #numero
     | ID            #variable
     ;
 
-lambdaExpr: '\\' ID '->' expr;
 
-infixExpr: 
-      (MULT | DIV | '(' MULT ')' | '(' DIV ')') expr expr    #multiplicaciodivisio
-     | (PLUS | MINUS | '(' PLUS ')' | '(' MINUS ')') expr expr     #sumaresta 
+lambdaExpr: '\\' ID '->' infixExprComp    #lambdafunc
+    ;
+
+infixExprComp: infixExpr expr2 #operaciobinaria
+    ;
+
+infixExpr: '(' operador ')' expr2     #operaciounaria
     ;
 
 NUMBER: [0-9]+;
-ID: [a-zA-Z_][a-zA-Z0-9_]*;
-WS: [ \t\r\n]+ -> skip; // Ignora espais en blanc
+ID: [a-z]+;
+WS: [ \n]+ -> skip; // Ignora espais en blanc
+
+operador : PLUS | MINUS | MULT | DIV ;
 
 PLUS: '+';
 MINUS: '-';

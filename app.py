@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import keyboard
 from antlr4 import *
 from exprsLexer import exprsLexer
 from exprsParser import exprsParser
@@ -9,7 +8,7 @@ from exprsVisitor import exprsVisitor
 
 #dependencies de fitxers meus
 import haskell as hk
-
+ 
 
 
 st.title('HinNer by Pablo')
@@ -25,13 +24,20 @@ if st.button('Entra el text'):
   token_stream = CommonTokenStream(lexer)
   parser = exprsParser(token_stream)
   tree = parser.root()
-
+  
+  
+  
   if parser.getNumberOfSyntaxErrors() == 0:
     #evaluador de l'arbre
     st.session_state.visitador.visit(tree)
+    dot_output = st.session_state.visitador.get_dot()
+
+    st.graphviz_chart(dot_output)
+
+    st.write("TA JOYA")
   else:
-    print(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
-    print(tree.toStringTree(recog=parser))
+    st.write(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
+    
     
   novaentrada = False
   st.session_state.clicked = False
