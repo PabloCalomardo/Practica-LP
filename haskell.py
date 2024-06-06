@@ -42,6 +42,16 @@ class TreeVisitor(exprsVisitor):
     def visitOperacio(self, ctx):
         self.visit(ctx.infixExprComp())
 
+    #Expr2 -> numero
+    def visitNum(self, ctx):
+        [num] = ctx.getChildren()
+        self.visit(num)
+    
+    #Expr2 -> id
+    def visitVar(self, ctx):
+        [var] = ctx.getChildren()
+        self.visit(var)
+
     #-----------------------------
     #    OPERACIONS XUNGUES
     #-----------------------------
@@ -50,58 +60,62 @@ class TreeVisitor(exprsVisitor):
 
     #LAMBDA λ
     def visitLambdafunc(self, ctx):
+        [barra,var,fletxa,iexpr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem el node λ
         self.builder.append(f'  {node_id} [label=" λ"];')
         #Creem node operacio a una banda
-        self.visit(ctx.infixExprComp())
+        self.visit(iexpr)
         #flechita @ -> operacio
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.infixExprComp())};')
+        self.builder.append(f'  {node_id} -> {self.get_node_id(iexpr)};')
         #Creem node variable NO SE PERQUÈ NO DETECTA COM A VARIABLE
-        self.visit(ctx.ID())
+        self.visit(var)
         #flechita @ -> variable
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.ID())};')
+        self.builder.append(f'  {node_id} -> {self.get_node_id(var)};')
 
     def visitOperaciobinaria(self, ctx):
+        [iexpr,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem node @
         self.builder.append(f'  {node_id} [label="@"];')
         #Creem node operacio unaria
-        self.visit(ctx.infixExpr())
+        self.visit(iexpr)
         #Creem node valor
-        self.visit(ctx.expr2())
+        self.visit(expr)
         #fletxes @ -> operacio binaria i valor
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.infixExpr())};')
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.expr2())};')
+        self.builder.append(f'  {node_id} -> {self.get_node_id(iexpr)};')
+        self.builder.append(f'  {node_id} -> {self.get_node_id(expr)};')
 
     def visitOperaciounaria(self, ctx):
+        [par1,op,par2,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #creem el node @
         self.builder.append(f'  {node_id} [label="@"];')
 
         #Creem el node operador
-        self.visit(ctx.operador()) 
+        self.visit(op) 
         #flechita @ -> node operador
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.operador())};') 
+        self.builder.append(f'  {node_id} -> {self.get_node_id(op)};') 
         #Creem el node expr2
-        self.visit(ctx.expr2())
+        self.visit(expr)
         #flechita @ -> node expr2
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.expr2())};')
+        self.builder.append(f'  {node_id} -> {self.get_node_id(expr)};')
 
 
     #subsitucio de X per 4, és a dir @ i dps lambda
     def visitFuncion(self, ctx):
+        [par,lexpr,par,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem el node @
         self.builder.append(f'  {node_id} [label="@"];')
         #Creem la funció lambda
-        self.visit(ctx.lambdaExpr())
+        self.visit(lexpr)
         #Creem la fletxa
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.lambdaExpr())};')
+        self.builder.append(f'  {node_id} -> {self.get_node_id(lexpr)};')
         #Creem el Numero NO EL DETECTA BÉ
-        self.visit(ctx.NUMBER())
+        self.visit(expr)
         #Creem la fletxa
-        self.builder.append(f'  {node_id} -> {self.get_node_id(ctx.NUMBER())};')
+        self.builder.append(f'  {node_id} -> {self.get_node_id(expr)};')
         return None
 
 
