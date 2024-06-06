@@ -66,7 +66,7 @@ class TreeVisitor(exprsVisitor):
         node_id = self.get_node_id(ctx)
         #Creem node @
         self.builder.append(f'  {node_id} [label="@"];')
-        #Creem node operacio binaria
+        #Creem node operacio unaria
         self.visit(ctx.infixExpr())
         #Creem node valor
         self.visit(ctx.expr2())
