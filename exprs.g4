@@ -1,7 +1,8 @@
 grammar exprs;
 
-root : expr EOF            // l'etiqueta ja és root
-     ;
+root: expr EOF      #expressio
+    | assig EOF     #assignacio 
+    ;
 
 expr: lambdaExpr    #ExpresioLambda
     | infixExpr     #Operacioincompleta
@@ -17,6 +18,19 @@ expr2: NUMBER       #numero
 expr3: ID           #variable
     ;
 
+assig: normAssig    #normalassig
+    | opAssig       #operassig
+    ;
+
+expr4: CAP              #cap
+    | CAP '->' expr4    #caprec
+    ;
+
+normAssig: (NUMBER|ID) '::' CAP     #nassig
+    ;
+
+opAssig: '(' operador ')' '::' CAP '->' expr4    #opassig
+    ;
 
 lambdaExpr: '\\' expr3 '->' infixExprComp    #lambdafunc
     ;
@@ -31,6 +45,7 @@ operador : PLUS | MINUS | MULT | DIV ;
 
 NUMBER: [0-9]+;
 ID: [a-z]+;
+CAP: [A-Z]+;
 WS: [ \n]+ -> skip; // Ignora espais en blanc
 
 PLUS: '+';

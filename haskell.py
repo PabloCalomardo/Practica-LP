@@ -7,12 +7,18 @@ class TreeVisitor(exprsVisitor):
         self.builder = []
         self.node_count = 0
         self.node_ids = {}
+        self.taula = {}
+        self.assig = False
 
     
     def buida(self):
         self.builder = []
         self.node_count = 0
         self.node_ids = {}
+        self.assig = False
+
+    def afegit(self):
+        return self.assig
 
 
     #--------------------------
@@ -32,8 +38,11 @@ class TreeVisitor(exprsVisitor):
     #       INICI VISITADOR
     #--------------------------
 
+    def visitAssignacio(self, ctx):
+        self.assig = True
+        self.visit(ctx.assig())
 
-    def visitRoot(self, ctx):
+    def visitExpressio(self, ctx):
         self.visit(ctx.expr())
         return None
     
@@ -58,6 +67,12 @@ class TreeVisitor(exprsVisitor):
     def visitVar(self, ctx):
         [var] = ctx.getChildren()
         self.visit(var)
+
+    def visitNormalassig(self, ctx):
+        return self.visitChildren(ctx)
+
+    def visitOperassig(self, ctx):
+        return self.visitChildren(ctx)
 
     #-----------------------------
     #    OPERACIONS XUNGUES
@@ -124,9 +139,15 @@ class TreeVisitor(exprsVisitor):
         #Creem la fletxa
         self.builder.append(f'  {node_id} -> {self.get_node_id(expr)};')
         return None
+    
+    def visitNassig(self, ctx):
+        return self.visitChildren(ctx)
 
-
-
+    def visitOpassig(self, ctx):
+        return self.visitChildren(ctx)
+    
+    def visitCaprec(self, ctx):
+        return self.visitChildren(ctx)
 
     #-----------------------------
     #    NODES INDIVIDUALS
@@ -150,6 +171,9 @@ class TreeVisitor(exprsVisitor):
         #Creem el node Operador
         node_id = self.get_node_id(ctx)
         self.builder.append(f'  {node_id} [label="{ctx.getText()}"];')
+
+    def visitCapital(self, ctx):
+        return self.visitChildren(ctx)
 
         
     
