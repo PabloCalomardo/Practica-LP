@@ -34,8 +34,13 @@ class exprsVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by exprsParser#numovar.
-    def visitNumovar(self, ctx:exprsParser.NumovarContext):
+    # Visit a parse tree produced by exprsParser#num.
+    def visitNum(self, ctx:exprsParser.NumContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#var.
+    def visitVar(self, ctx:exprsParser.VarContext):
         return self.visitChildren(ctx)
 
 

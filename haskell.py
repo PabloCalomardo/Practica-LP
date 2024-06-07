@@ -8,6 +8,13 @@ class TreeVisitor(exprsVisitor):
         self.node_count = 0
         self.node_ids = {}
 
+    
+    def buida(self):
+        self.builder = []
+        self.node_count = 0
+        self.node_ids = {}
+
+
     #--------------------------
     #    FUNCIONS AUXILIARS
     #--------------------------
