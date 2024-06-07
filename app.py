@@ -11,7 +11,8 @@ import haskell as hk
  
 st.title('HinNer by Pablo')
 variable = st.text_input('Escriu la teva expressió', '3 + 4')
-
+placeholder = st.empty()
+print(variable)
 
 if 'visitador' not in st.session_state:
   st.session_state.visitador = hk.TreeVisitor()
@@ -28,9 +29,7 @@ if st.button('Entra el text'):
     #evaluador de l'arbre
     st.session_state.visitador.visit(tree)
     dot_output = st.session_state.visitador.get_dot()
-    st.graphviz_chart(dot_output)
-
-    st.session_state.visitador.buidacontingut()
+    placeholder.graphviz_chart(dot_output)
 
     st.write("TA JOYA")
   else:
@@ -38,5 +37,4 @@ if st.button('Entra el text'):
     
   novaentrada = False
   st.session_state.clicked = False
-
 

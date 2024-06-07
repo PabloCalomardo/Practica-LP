@@ -12,11 +12,6 @@ class TreeVisitor(exprsVisitor):
     #    FUNCIONS AUXILIARS
     #--------------------------
 
-    def buidacontingut(self):
-        self.builder = []
-        self.node_count = 0
-        self.node_ids = {}
-
     def get_dot(self):
         return "digraph G {\n" + "\n".join(self.builder) + "\n}\n"
 
