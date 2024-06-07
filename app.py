@@ -26,14 +26,13 @@ if st.button('Entra el text'):
   if parser.getNumberOfSyntaxErrors() == 0:
     #evaluador de l'arbre
     st.session_state.visitador.visit(tree)
+    table = st.table(st.session_state.visitador.tipus())
     if (not st.session_state.visitador.afegit()): 
       dot_output = st.session_state.visitador.get_dot()
       st.graphviz_chart(dot_output)
-      st.session_state.visitador.buida()
-    else:
-      print("hola")
 
     st.write("TA JOYA")
+    st.session_state.visitador.buida()
   else:
     st.write(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
     

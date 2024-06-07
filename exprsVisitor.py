@@ -9,8 +9,13 @@ else:
 
 class exprsVisitor(ParseTreeVisitor):
 
-    # Visit a parse tree produced by exprsParser#root.
-    def visitRoot(self, ctx:exprsParser.RootContext):
+    # Visit a parse tree produced by exprsParser#expressio.
+    def visitExpressio(self, ctx:exprsParser.ExpressioContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#assignacio.
+    def visitAssignacio(self, ctx:exprsParser.AssignacioContext):
         return self.visitChildren(ctx)
 
 
@@ -51,6 +56,36 @@ class exprsVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by exprsParser#variable.
     def visitVariable(self, ctx:exprsParser.VariableContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#normalassig.
+    def visitNormalassig(self, ctx:exprsParser.NormalassigContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#operassig.
+    def visitOperassig(self, ctx:exprsParser.OperassigContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#cap.
+    def visitCap(self, ctx:exprsParser.CapContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#caprec.
+    def visitCaprec(self, ctx:exprsParser.CaprecContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#nassig.
+    def visitNassig(self, ctx:exprsParser.NassigContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by exprsParser#opassig.
+    def visitOpassig(self, ctx:exprsParser.OpassigContext):
         return self.visitChildren(ctx)
 
 

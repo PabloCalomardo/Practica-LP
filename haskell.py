@@ -19,6 +19,9 @@ class TreeVisitor(exprsVisitor):
 
     def afegit(self):
         return self.assig
+    
+    def tipus(self):
+        return self.taula
 
 
     #--------------------------
@@ -69,10 +72,14 @@ class TreeVisitor(exprsVisitor):
         self.visit(var)
 
     def visitNormalassig(self, ctx):
-        return self.visitChildren(ctx)
+        [var] = ctx.getChildren()
+        self.visit(var)
 
     def visitOperassig(self, ctx):
-        return self.visitChildren(ctx)
+        [var] = ctx.getChildren()
+        self.visit(var)
+
+    
 
     #-----------------------------
     #    OPERACIONS XUNGUES
@@ -141,13 +148,20 @@ class TreeVisitor(exprsVisitor):
         return None
     
     def visitNassig(self, ctx):
-        return self.visitChildren(ctx)
+        [var,dospunts,cap] = ctx.getChildren()
+        self.taula[var.getText()] = cap.getText()
 
     def visitOpassig(self, ctx):
-        return self.visitChildren(ctx)
+        [par,op,par2,dospunts,cap,fletxa,expr4] = ctx.getChildren()
+        self.taula['('+op.getText()+')'] = '('+cap.getText()+' -> '+self.visit(expr4)+')'
     
     def visitCaprec(self, ctx):
-        return self.visitChildren(ctx)
+        [cap,fletxa,expr4] = ctx.getChildren()
+        return '('+cap.getText()+' -> '+self.visit(expr4)+')'
+    
+    def visitCap(self, ctx):
+        [cap] = ctx.getChildren()
+        return cap.getText()
 
     #-----------------------------
     #    NODES INDIVIDUALS
@@ -172,8 +186,7 @@ class TreeVisitor(exprsVisitor):
         node_id = self.get_node_id(ctx)
         self.builder.append(f'  {node_id} [label="{ctx.getText()}"];')
 
-    def visitCapital(self, ctx):
-        return self.visitChildren(ctx)
+
 
         
     
