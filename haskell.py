@@ -92,7 +92,7 @@ class TreeVisitor(exprsVisitor):
         [barra,var,fletxa,iexpr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem el node λ
-        self.builder.append(f'  {node_id} [label=" λ"];')
+        self.builder.append(f'  {node_id} [label=" λ \n'+'a'+'"];')
         #Creem node operacio a una banda
         self.visit(iexpr)
         #flechita @ -> operacio
@@ -106,7 +106,7 @@ class TreeVisitor(exprsVisitor):
         [iexpr,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem node @
-        self.builder.append(f'  {node_id} [label="@"];')
+        self.builder.append(f'  {node_id} [label="@\n'+'a'+'"];')
         #Creem node operacio unaria
         self.visit(iexpr)
         #Creem node valor
@@ -119,7 +119,7 @@ class TreeVisitor(exprsVisitor):
         [par1,op,par2,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #creem el node @
-        self.builder.append(f'  {node_id} [label="@"];')
+        self.builder.append(f'  {node_id} [label="@\n'+'a'+'"];')
 
         #Creem el node operador
         self.visit(op) 
@@ -136,7 +136,7 @@ class TreeVisitor(exprsVisitor):
         [par,lexpr,par,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem el node @
-        self.builder.append(f'  {node_id} [label="@"];')
+        self.builder.append(f'  {node_id} [label="@\n'+'a'+'"];')
         #Creem la funció lambda
         self.visit(lexpr)
         #Creem la fletxa
@@ -173,18 +173,18 @@ class TreeVisitor(exprsVisitor):
 
     def visitNumero(self, ctx):
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.NUMBER().getText()}"];')
+        self.builder.append(f'  {node_id} [label="{ctx.NUMBER().getText()}\n'+'a'+'"];')
         return None
 
     def visitVariable(self, ctx):
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}"];')
+        self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+'a'+'"];')
         return None
     
     def visitOperador(self, ctx):
         #Creem el node Operador
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.getText()}"];')
+        self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+'a'+'"];')
 
 
 
