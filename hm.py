@@ -1,15 +1,15 @@
 import streamlit as st
 from antlr4 import *
-from exprsLexer import exprsLexer
-from exprsParser import exprsParser
-from exprsVisitor import exprsVisitor
+from hmLexer import hmLexer
+from hmParser import hmParser
+from hmVisitor import hmVisitor
 
 
 #------------------------------------
 #             VISITADOR
 #------------------------------------
 
-class TreeVisitor(exprsVisitor):
+class TreeVisitor(hmVisitor):
     def __init__(self):
         self.builder = []
         self.node_count = 0
@@ -300,9 +300,9 @@ if 'visitador' not in st.session_state:
 
 if st.button('Accepta Expresió'):
   input_stream  = InputStream(variable)
-  lexer = exprsLexer(input_stream)
+  lexer = hmLexer(input_stream)
   token_stream = CommonTokenStream(lexer)
-  parser = exprsParser(token_stream)
+  parser = hmParser(token_stream)
   tree = parser.root()
   
   

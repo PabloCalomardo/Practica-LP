@@ -1,4 +1,4 @@
-grammar exprs;
+grammar hm;
 
 root: expr EOF      #expressio
     | assig EOF     #assignacio 
