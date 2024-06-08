@@ -10,6 +10,8 @@ class TreeVisitor(exprsVisitor):
         self.node_ids = {}
         self.abecedari = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
         self.taula = {}
+        self.preinferencia = {}
+        self.inferencia = {}
         self.assig = False
 
     
@@ -18,6 +20,9 @@ class TreeVisitor(exprsVisitor):
         self.node_count = 0
         self.abc_count = 0
         self.node_ids = {}
+        self.preinferencia = {}
+        self.inferencia = {}
+        self.abecedari = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
         self.assig = False
 
     def afegit(self):
@@ -26,6 +31,24 @@ class TreeVisitor(exprsVisitor):
     def tipus(self):
         return self.taula
 
+    def getinferencia(self):
+        return self.inferencia
+    
+    def canviaabecedari(self):
+        self.builder = []
+        self.node_ids = {}
+        count = 0
+        while count < self.abc_count:
+            
+            self.abecedari[count] = self.inferencia[self.abecedari[count]]
+            count += 1
+        self.abc_count = 0
+            
+            
+    def error(self):
+        if("Type Error" in self.inferencia):
+            return self.inferencia["Type Error"]
+        return ""
 
     #--------------------------
     #    FUNCIONS AUXILIARS
@@ -40,6 +63,22 @@ class TreeVisitor(exprsVisitor):
             self.node_count += 1
         return self.node_ids[ctx]
 
+    def trobatipus(self,tipus1, tipus2):
+        if(tipus2 >= 'a'):  #inferència de tipus
+            self.inferencia[tipus2] = tipus1[1]
+        elif(tipus2 != tipus1[1]): # Mirem si el tipus2 és el que toca
+            self.inferencia["Type Error"] = "Type Error: "+ tipus1[1]+" vs " +tipus2
+        
+        return tipus1[6:-1]
+    
+    def trobatipuslambda(self,tipus1, tipus2):
+        if(tipus2 >= 'a'):  #inferència de tipus
+            self.inferencia[tipus2] = tipus1[1]
+        elif(tipus2 != tipus1[1]): # Mirem si el tipus2 és el que toca
+            self.inferencia["Type Error"] = "Type Error: "+ tipus1[1]+" vs " +tipus2
+        
+        return tipus1[6:-1]
+            
     #--------------------------
     #       INICI VISITADOR
     #--------------------------
@@ -106,34 +145,47 @@ class TreeVisitor(exprsVisitor):
         #flechita @ -> variable
         self.builder.append(f'  {node_id} -> {self.get_node_id(var)};')
 
+
+
+
     def visitOperaciobinaria(self, ctx):
         [iexpr,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem node @
-        self.builder.append(f'  {node_id} [label="@\n'+self.abecedari[self.abc_count]+'"];')
+        lletra = self.abecedari[self.abc_count]
+        self.builder.append(f'  {node_id} [label="@\n'+lletra+'"];')
         self.abc_count += 1
         #Creem node operacio unaria
-        self.visit(iexpr)
+        tipusoperacio = self.visit(iexpr)
         #Creem node valor
-        self.visit(expr)
+        tipusexpresio = self.visit(expr)
         #fletxes @ -> operacio binaria i valor
         self.builder.append(f'  {node_id} -> {self.get_node_id(iexpr)};')
         self.builder.append(f'  {node_id} -> {self.get_node_id(expr)};')
+
+        resultat = self.trobatipus(tipusoperacio,tipusexpresio)
+        self.inferencia[lletra] = resultat
+        return self.inferencia[lletra]
 
     def visitOperaciounaria(self, ctx):
         [par1,op,par2,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #creem el node @
-        self.builder.append(f'  {node_id} [label="@\n'+self.abecedari[self.abc_count]+'"];')
+        lletra = self.abecedari[self.abc_count]
+        self.builder.append(f'  {node_id} [label="@\n'+lletra+'"];')
         self.abc_count += 1
         #Creem el node operador
-        self.visit(op) 
+        tipusoperacio = self.visit(op) 
         #flechita @ -> node operador
         self.builder.append(f'  {node_id} -> {self.get_node_id(op)};') 
         #Creem el node expr2
-        self.visit(expr)
+        tipusexpresio = self.visit(expr)
         #flechita @ -> node expr2
         self.builder.append(f'  {node_id} -> {self.get_node_id(expr)};')
+
+        resultat = self.trobatipus(tipusoperacio,tipusexpresio)
+        self.inferencia[lletra] = resultat
+        return self.inferencia[lletra]
 
 
     #subsitucio de X per 4, és a dir @ i dps lambda
@@ -174,26 +226,34 @@ class TreeVisitor(exprsVisitor):
     #-----------------------------
 
     def visitNumovar(self, ctx):
-        self.visit(ctx.expr2())
-        return None
+        return self.visit(ctx.expr2())
 
     def visitNumero(self, ctx):
         node_id = self.get_node_id(ctx)
         if (ctx.getText() in self.taula):
             self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+self.taula[ctx.getText()]+'"];')
+            return self.taula[ctx.getText()]
         else:
             raise Exception("Error en la creació de l'arbre","El nombre " + ctx.getText() + " no ha sigut declarat a la taula")
 
     def visitVariable(self, ctx):
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+self.abecedari[self.abc_count]+'"];')
-        self.abc_count += 1
-        return None
+        lletra = self.abecedari[self.abc_count]
+        if ctx.ID().getText() not in self.preinferencia:
+            self.preinferencia[ctx.ID().getText()] = lletra
+            self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+lletra+'"];')
+            self.abc_count += 1
+            return lletra
+
+        else:
+            self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+self.preinferencia[ctx.ID().getText()]+'"];')
+            return self.preinferencia[ctx.ID().getText()]
     
     def visitOperador(self, ctx):
         node_id = self.get_node_id(ctx)
         if ('('+ctx.getText()+')' in self.taula):
             self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+self.taula['('+ctx.getText()+')']+'"];')
+            return self.taula['('+ctx.getText()+')']
         else:
             raise Exception("Error en la creació de l'arbre","L'operador (" + ctx.getText() + ") no ha sigut declarat a la taula")
 
