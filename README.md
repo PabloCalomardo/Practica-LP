@@ -23,7 +23,7 @@ per obrir la web per defecte només cal executar les comandes següents, que cre
 antlr4 -Dlanguage=Python3 -no-listener -visitor hm.g4
 streamlit run hm.py
 ```
-Un cop dins, apareixerà una entrada de text on s'haurà d'inserir la comanda desitjada per a que el HinNer la reconegui i executi.
+Un cop dins, apareixerà una entrada de text on s'haurà d'inserir la comanda desitjada per a que el HinNer la reconegui i executi (cal apretar el botó per a que el programa la detecti).
 Si no es vol que es retorni error, cal que primer declareu el tipus tant del números que s'han d'utilitzar tant com de les operacions, les vàriables no cal ja que el propi programa en realitzarà la inferència.
 
 un exemple d'ús pot ser el següent:
@@ -50,7 +50,14 @@ Operacions (cal destacar que només s'acceptaran Operacions i Enters que prèvia
 - \Variable -> (Operacio) Enter/Variable Enter/Variable   (Funció Lambda)
 - (\Variable -> (Operacio) Enter/Variable Enter/Variable) Enter  (Aplicació d'una funció lambda)
 
-Cal destacar que hi ha control d'errors, i que si qualsevol dels casos que falla es detindrà la creació dels grafs i es mostrarà l'error per pantalla.
+Per a les Declaracions només apareixerà per pantalla una taula on hi haurà tots els enters i operacions que se n'ha declarat el tipus.
+Per a les operacions es mostrarà:
+- La taula de declaracions descrita anteriorment
+- Un Graf sintàctic on, les variables que no estiguin declarades simprement tindran assignades una lletra minúscula de l'abecedari
+- Una Taula d'inferència on cada lletra assignada tindrà el seu corresponent Tipus
+- Una nova versió del Graf Anterior on les lletres hauran estat substituïdes pels Tipus corresponents (Aquest és el graf definitiu amb inferència)
+
+Cal destacar que hi ha control d'errors, i que si en qualsevol dels casos que falla, es detindrà la creació dels grafs i es mostrarà l'error per pantalla.
 
 
 ## Desenvolupament
