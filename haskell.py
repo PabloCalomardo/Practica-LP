@@ -39,7 +39,6 @@ class TreeVisitor(exprsVisitor):
         self.node_ids = {}
         count = 0
         while count < self.abc_count:
-            
             self.abecedari[count] = self.inferencia[self.abecedari[count]]
             count += 1
         self.abc_count = 0
@@ -73,11 +72,8 @@ class TreeVisitor(exprsVisitor):
     
     def trobatipuslambda(self,tipus1, tipus2):
         if(tipus2 >= 'a'):  #inferència de tipus
-            self.inferencia[tipus2] = tipus1[1]
-        elif(tipus2 != tipus1[1]): # Mirem si el tipus2 és el que toca
-            self.inferencia["Type Error"] = "Type Error: "+ tipus1[1]+" vs " +tipus2
-        
-        return tipus1[6:-1]
+            tipus2 = self.inferencia[tipus2]
+        return '('+tipus1+' -> '+tipus2+ ')'
             
     #--------------------------
     #       INICI VISITADOR
@@ -134,16 +130,20 @@ class TreeVisitor(exprsVisitor):
         [barra,var,fletxa,iexpr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem el node λ
+        lletra = self.abecedari[self.abc_count]
         self.builder.append(f'  {node_id} [label=" λ \n'+self.abecedari[self.abc_count]+'"];')
         self.abc_count += 1
         #Creem node operacio a una banda
-        self.visit(iexpr)
+        tipusabst = self.visit(iexpr)
         #flechita @ -> operacio
         self.builder.append(f'  {node_id} -> {self.get_node_id(iexpr)};')
         #Creem node variable NO SE PERQUÈ NO DETECTA COM A VARIABLE
-        self.visit(var)
+        tipusvar = self.visit(var)
         #flechita @ -> variable
         self.builder.append(f'  {node_id} -> {self.get_node_id(var)};')
+        resultat = self.trobatipuslambda(tipusabst,tipusvar)
+        self.inferencia[lletra] = resultat
+        return self.inferencia[lletra]
 
 
 
@@ -192,18 +192,21 @@ class TreeVisitor(exprsVisitor):
     def visitFuncion(self, ctx):
         [par,lexpr,par,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
+        lletra = self.abecedari[self.abc_count]
         #Creem el node @
         self.builder.append(f'  {node_id} [label="@\n'+self.abecedari[self.abc_count]+'"];')
         self.abc_count += 1
         #Creem la funció lambda
-        self.visit(lexpr)
+        tipuslexpr = self.visit(lexpr) 
         #Creem la fletxa
         self.builder.append(f'  {node_id} -> {self.get_node_id(lexpr)};')
         #Creem el Numero NO EL DETECTA BÉ
-        self.visit(expr)
+        tipusexpresio = self.visit(expr)
         #Creem la fletxa
         self.builder.append(f'  {node_id} -> {self.get_node_id(expr)};')
-        return None
+        resultat = self.trobatipus(tipuslexpr,tipusexpresio)
+        self.inferencia[lletra] = resultat
+        return self.inferencia[lletra]
     
     def visitNassig(self, ctx):
         [num,dospunts,cap] = ctx.getChildren()
@@ -240,14 +243,14 @@ class TreeVisitor(exprsVisitor):
         node_id = self.get_node_id(ctx)
         lletra = self.abecedari[self.abc_count]
         if ctx.ID().getText() not in self.preinferencia:
-            self.preinferencia[ctx.ID().getText()] = lletra
+            self.preinferencia[ctx.ID().getText()] = self.abc_count
             self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+lletra+'"];')
             self.abc_count += 1
             return lletra
 
         else:
-            self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+self.preinferencia[ctx.ID().getText()]+'"];')
-            return self.preinferencia[ctx.ID().getText()]
+            self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+self.abecedari[self.preinferencia[ctx.ID().getText()]]+'"];')
+            return self.abecedari[self.preinferencia[ctx.ID().getText()]]
     
     def visitOperador(self, ctx):
         node_id = self.get_node_id(ctx)
