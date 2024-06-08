@@ -1,6 +1,6 @@
 # HinNer by Pablo
 
-HinNer by Pablo és una aplicació d'inferència de tipus amb un subconjunt de gramàtica de Haskell i Assignacions de Tipus, utilitzant les plataformes Streamlit i per a la gramàtica el llenguatge antlr4.
+HinNer by Pablo és una aplicació d'inferència de tipus amb un subconjunt de gramàtica de Haskell i Assignacions de Tipus, utilitzant la plataforma Streamlit i per a la gramàtica el llenguatge antlr4.
 És la pràctica de GEI-LP (edició 2023-2024 Q2).
 
 ## Instalació
