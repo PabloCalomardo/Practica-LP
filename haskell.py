@@ -154,8 +154,8 @@ class TreeVisitor(exprsVisitor):
         return None
     
     def visitNassig(self, ctx):
-        [var,dospunts,cap] = ctx.getChildren()
-        self.taula[var.getText()] = cap.getText()
+        [num,dospunts,cap] = ctx.getChildren()
+        self.taula[num.getText()] = cap.getText()
 
     def visitOpassig(self, ctx):
         [par,op,par2,dospunts,cap,fletxa,expr4] = ctx.getChildren()
@@ -179,9 +179,10 @@ class TreeVisitor(exprsVisitor):
 
     def visitNumero(self, ctx):
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.NUMBER().getText()}\n'+self.abecedari[self.abc_count]+'"];')
-        self.abc_count += 1
-        return None
+        if (ctx.getText() in self.taula):
+            self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+self.taula[ctx.getText()]+'"];')
+        else:
+            raise Exception("Error en la creació de l'arbre","El nombre " + ctx.getText() + " no ha sigut declarat a la taula")
 
     def visitVariable(self, ctx):
         node_id = self.get_node_id(ctx)
@@ -190,10 +191,11 @@ class TreeVisitor(exprsVisitor):
         return None
     
     def visitOperador(self, ctx):
-        #Creem el node Operador
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+self.abecedari[self.abc_count]+'"];')
-        self.abc_count += 1
+        if ('('+ctx.getText()+')' in self.taula):
+            self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+self.taula['('+ctx.getText()+')']+'"];')
+        else:
+            raise Exception("Error en la creació de l'arbre","L'operador (" + ctx.getText() + ") no ha sigut declarat a la taula")
 
 
 

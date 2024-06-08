@@ -26,7 +26,7 @@ expr4: CAP              #cap
     | CAP '->' expr4    #caprec
     ;
 
-normAssig: (NUMBER|ID) '::' CAP     #nassig
+normAssig: NUMBER '::' CAP     #nassig
     ;
 
 opAssig: '(' operador ')' '::' CAP '->' expr4    #opassig
