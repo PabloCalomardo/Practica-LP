@@ -6,7 +6,9 @@ class TreeVisitor(exprsVisitor):
     def __init__(self):
         self.builder = []
         self.node_count = 0
+        self.abc_count = 0
         self.node_ids = {}
+        self.abecedari = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
         self.taula = {}
         self.assig = False
 
@@ -14,6 +16,7 @@ class TreeVisitor(exprsVisitor):
     def buida(self):
         self.builder = []
         self.node_count = 0
+        self.abc_count = 0
         self.node_ids = {}
         self.assig = False
 
@@ -92,7 +95,8 @@ class TreeVisitor(exprsVisitor):
         [barra,var,fletxa,iexpr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem el node λ
-        self.builder.append(f'  {node_id} [label=" λ \n'+'a'+'"];')
+        self.builder.append(f'  {node_id} [label=" λ \n'+self.abecedari[self.abc_count]+'"];')
+        self.abc_count += 1
         #Creem node operacio a una banda
         self.visit(iexpr)
         #flechita @ -> operacio
@@ -106,7 +110,8 @@ class TreeVisitor(exprsVisitor):
         [iexpr,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem node @
-        self.builder.append(f'  {node_id} [label="@\n'+'a'+'"];')
+        self.builder.append(f'  {node_id} [label="@\n'+self.abecedari[self.abc_count]+'"];')
+        self.abc_count += 1
         #Creem node operacio unaria
         self.visit(iexpr)
         #Creem node valor
@@ -119,8 +124,8 @@ class TreeVisitor(exprsVisitor):
         [par1,op,par2,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #creem el node @
-        self.builder.append(f'  {node_id} [label="@\n'+'a'+'"];')
-
+        self.builder.append(f'  {node_id} [label="@\n'+self.abecedari[self.abc_count]+'"];')
+        self.abc_count += 1
         #Creem el node operador
         self.visit(op) 
         #flechita @ -> node operador
@@ -136,7 +141,8 @@ class TreeVisitor(exprsVisitor):
         [par,lexpr,par,expr] = ctx.getChildren()
         node_id = self.get_node_id(ctx)
         #Creem el node @
-        self.builder.append(f'  {node_id} [label="@\n'+'a'+'"];')
+        self.builder.append(f'  {node_id} [label="@\n'+self.abecedari[self.abc_count]+'"];')
+        self.abc_count += 1
         #Creem la funció lambda
         self.visit(lexpr)
         #Creem la fletxa
@@ -173,18 +179,21 @@ class TreeVisitor(exprsVisitor):
 
     def visitNumero(self, ctx):
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.NUMBER().getText()}\n'+'a'+'"];')
+        self.builder.append(f'  {node_id} [label="{ctx.NUMBER().getText()}\n'+self.abecedari[self.abc_count]+'"];')
+        self.abc_count += 1
         return None
 
     def visitVariable(self, ctx):
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+'a'+'"];')
+        self.builder.append(f'  {node_id} [label="{ctx.ID().getText()}\n'+self.abecedari[self.abc_count]+'"];')
+        self.abc_count += 1
         return None
     
     def visitOperador(self, ctx):
         #Creem el node Operador
         node_id = self.get_node_id(ctx)
-        self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+'a'+'"];')
+        self.builder.append(f'  {node_id} [label="{ctx.getText()}\n'+self.abecedari[self.abc_count]+'"];')
+        self.abc_count += 1
 
 
 
