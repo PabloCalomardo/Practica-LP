@@ -5,7 +5,7 @@ HinNer by Pablo és una aplicació d'inferència de tipus amb un subconjunt de g
 
 ## Instalació
 
-Per poder utilitzar aquest repositori s'ha de tenir instalat Streamlit o a partir del 10/06/2024 entrar buscar HinNer by Pablo a la web d'Streamlit.
+Per poder utilitzar aquest repositori s'ha de tenir instalat Streamlit o seguir aquest link a la web d'Streamlit (https://practica-lp-ynpfvsyr2vrcmg7jnretpd.streamlit.app/).
 Si es vol generar un visitador per a utilitzar l'aplicació en un projecte propi s'ha d'instalar també antlr4 i generar els visitadors.
 
 ```bash
